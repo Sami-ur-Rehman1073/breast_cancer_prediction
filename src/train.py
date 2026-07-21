@@ -169,3 +169,54 @@ def predict_pipeline(
     probabilities = pipeline.predict_proba(X_test)[:, 1]
 
     return predictions, probabilities
+
+
+# Cross Validation
+
+def perform_cross_validation(
+    pipeline,
+    X_train,
+    y_train,
+    cv=5,
+):
+    """
+    Perform Stratified K-Fold Cross Validation.
+
+    Parameters
+    ----------
+    pipeline : Pipeline
+    X_train : pd.DataFrame
+    y_train : pd.Series
+    cv : int
+
+    Returns
+    -------
+    cv_results_df
+    """
+
+    scoring = {
+        "accuracy": "accuracy",
+        "precision": "precision",
+        "recall": "recall",
+        "f1": "f1",
+        "roc_auc": "roc_auc",
+    }
+
+    stratified_cv = StratifiedKFold(
+        n_splits=cv,
+        shuffle=True,
+        random_state=42,
+    )
+
+    cv_results = cross_validate(
+        estimator=pipeline,
+        X=X_train,
+        y=y_train,
+        cv=stratified_cv,
+        scoring=scoring,
+        return_train_score=False,
+    )
+
+    cv_results_df = pd.DataFrame(cv_results)
+
+    return cv_results_df
