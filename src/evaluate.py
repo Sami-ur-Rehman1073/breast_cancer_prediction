@@ -158,3 +158,46 @@ def get_cv_std(cv_results):
         .std()
         .rename("Std Dev")
     )
+
+
+# Test Metrics
+
+def calculate_metrics(
+    y_test,
+    predictions,
+    probabilities,
+):
+    """
+    Calculate evaluation metrics.
+    """
+
+    metrics = {
+
+        "Accuracy": accuracy_score(
+            y_test,
+            predictions,
+        ),
+
+        "Precision": precision_score(
+            y_test,
+            predictions,
+        ),
+
+        "Recall": recall_score(
+            y_test,
+            predictions,
+        ),
+
+        "F1 Score": f1_score(
+            y_test,
+            predictions,
+        ),
+
+        "ROC AUC": roc_auc_score(
+            y_test,
+            probabilities,
+        ),
+
+    }
+
+    return metrics
