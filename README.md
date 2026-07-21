@@ -267,8 +267,6 @@ The following metrics were used during model evaluation:
 
 # 🏆 Final Model Performance
 
-After hyperparameter tuning, the final model achieved:
-
 | Metric | Score |
 |---------|-------:|
 | **Accuracy** | **97.37%** |
