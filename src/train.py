@@ -86,3 +86,38 @@ def get_models(random_state: int = 42):
     }
 
     return models
+
+
+# Pipeline Creation
+
+def create_pipeline(preprocessor, model,random_state: int = 42):
+    """
+    Creates an imbalanced-learn pipeline consisting of:
+
+    StandardScaler (inside ColumnTransformer)
+            ↓
+          SMOTE
+            ↓
+        ML Classifier
+    """
+
+    pipeline = Pipeline(
+        steps=[
+            (
+                "preprocessor",
+                preprocessor,
+            ),
+
+            (
+                "smote",
+                SMOTE(random_state=random_state),
+            ),
+
+            (
+                "classifier",
+                model,
+            ),
+        ]
+    )
+
+    return pipeline
