@@ -248,3 +248,21 @@ def plot_confusion_matrix(
     plt.title("Confusion Matrix")
     plt.grid(False)
     plt.show()
+
+
+
+
+# Classification Report
+
+def print_classification_report(
+    y_test,
+    predictions,
+):
+    """
+    Print classification report.
+    """
+
+    print(classification_report(
+        y_test,
+        predictions,
+    ))
