@@ -204,11 +204,51 @@ Each model was evaluated using **5-Fold Stratified Cross Validation**.
 
 ---
 
+
+---
+
+# 🏅 Model Selection
+
+Several Machine Learning algorithms were trained and evaluated to identify the most suitable model for breast cancer classification. Each model was assessed using **5-Fold Stratified Cross Validation** to ensure reliable and unbiased performance estimation.
+
+The following models were compared:
+
+- Logistic Regression
+- Decision Tree
+- Random Forest
+- K-Nearest Neighbors (KNN)
+- Support Vector Machine (SVM)
+- XGBoost
+
+The evaluation was based on the following performance metrics:
+
+- Accuracy
+- Precision
+- Recall
+- F1-Score
+- ROC-AUC Score
+
+After comparing the cross-validation results, **Logistic Regression** was selected as the final model for hyperparameter tuning.
+
+## Why Logistic Regression?
+
+Logistic Regression consistently demonstrated the best overall performance across all evaluation metrics while maintaining excellent generalization on unseen data.
+
+The model was selected for the following reasons:
+
+- In the medical field, recall is the most important metric to be considerd. Logistic Regression had the highest recall amoung the models.
+
+- The training and testing metrics of each model were compared, and in case of logistic regression, the gap between the training and testing metrics was lowest. It indicates that there was no overfitting.
+
+- The performance of logistic regression was satisfactory if we consider other metrics like accuarcy, precision, f1 score etc.
+
+---
+
+
+
 # 🔧 Hyperparameter Tuning
 
 The best-performing model was further optimized using **GridSearchCV**.
-
-Hyperparameter tuning was performed to maximize the ROC-AUC score while improving the model's overall generalization performance.
 
 ---
 
@@ -230,12 +270,12 @@ The following metrics were used during model evaluation:
 After hyperparameter tuning, the final model achieved:
 
 | Metric | Score |
-|---------|-------|
+|---------|-------:|
 | **Accuracy** | **97.37%** |
 | **Precision** | **98.57%** |
 | **Recall** | **97.18%** |
-| **F1 Score** | **97.87%** |
-| **ROC-AUC** | **99.61%** |
+| **F1-Score** | **97.87%** |
+| **ROC-AUC Score** | **99.61%** |
 
 These results indicate excellent classification performance while maintaining strong precision and recall.
 
