@@ -268,3 +268,21 @@ def train_multiple_models(
         trained_models[model_name] = trained_pipeline
 
     return trained_models
+
+
+# Save Pipeline
+
+def save_pipeline(
+    pipeline,
+    filepath,
+):
+    """
+    Save trained pipeline.
+    """
+
+    joblib.dump(
+        pipeline,
+        filepath,
+    )
+
+    print(f"Pipeline saved to {filepath}")
