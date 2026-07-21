@@ -390,3 +390,56 @@ def compare_train_vs_test(
     ).abs()
 
     return comparison
+
+
+# Complete Evaluation
+
+def evaluate_model(
+    pipeline,
+    X_test,
+    y_test,
+):
+    """
+    Perform complete model evaluation.
+    """
+
+    predictions, probabilities = predict_pipeline(
+        pipeline,
+        X_test,
+    )
+
+    metrics = calculate_metrics(
+        y_test,
+        predictions,
+        probabilities,
+    )
+
+    print("=" * 60)
+    print("Test Performance")
+    print("=" * 60)
+
+    print_test_metrics(metrics)
+
+    print()
+
+    print("=" * 60)
+    print("Classification Report")
+    print("=" * 60)
+
+    print_classification_report(
+        y_test,
+        predictions,
+    )
+
+    plot_confusion_matrix(
+        y_test,
+        predictions,
+    )
+
+    plot_roc_curve(
+        pipeline,
+        X_test,
+        y_test,
+    )
+
+    return metrics
