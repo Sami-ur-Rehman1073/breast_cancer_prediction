@@ -4,7 +4,6 @@ preprocess.py
 This module contains all preprocessing-related functions for the
 Breast Cancer Prediction project.
 
-Author: Sami-ur-Rehman
 """
 
 import joblib
