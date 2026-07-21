@@ -48,3 +48,23 @@ def load_pipeline(filepath):
     return joblib.load(filepath)
 
 
+# Prediction
+
+def predict_pipeline(
+    pipeline,
+    X_test,
+):
+    """
+    Generate predictions using the trained pipeline.
+
+    Returns
+    -------
+    predictions
+    probabilities
+    """
+
+    predictions = pipeline.predict(X_test)
+
+    probabilities = pipeline.predict_proba(X_test)[:, 1]
+
+    return predictions, probabilities
