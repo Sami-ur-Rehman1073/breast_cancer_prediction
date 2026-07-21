@@ -233,37 +233,30 @@ def train_multiple_models(
     """
     Train all machine learning models.
 
+    Parameters
+    ----------
+    preprocessor : ColumnTransformer
+    X_train : pd.DataFrame
+    y_train : pd.Series
+
     Returns
     -------
-    trained_models
-    model_results
+    dict
+        Dictionary containing trained pipelines.
     """
 
     trained_models = {}
-
-    model_results = []
-
     models = get_models()
 
     for model_name, model in models.items():
 
         print("=" * 70)
-        print(model_name)
+        print(f"Training {model_name}")
         print("=" * 70)
 
         pipeline = create_pipeline(
             preprocessor,
             model,
-        )
-
-        cv_results = perform_cross_validation(
-            pipeline,
-            X_train,
-            y_train,
-        )
-
-        average_scores = get_average_cv_scores(
-            cv_results
         )
 
         trained_pipeline = fit_pipeline(
@@ -274,22 +267,4 @@ def train_multiple_models(
 
         trained_models[model_name] = trained_pipeline
 
-        row = {
-            "Model": model_name,
-            "Accuracy": average_scores["test_accuracy"],
-            "Precision": average_scores["test_precision"],
-            "Recall": average_scores["test_recall"],
-            "F1 Score": average_scores["test_f1"],
-            "ROC AUC": average_scores["test_roc_auc"],
-        }
-
-        model_results.append(row)
-
-    model_results = pd.DataFrame(model_results)
-
-    model_results = model_results.sort_values(
-        by="ROC AUC",
-        ascending=False,
-    )
-
-    return trained_models, model_results
+    return trained_models
