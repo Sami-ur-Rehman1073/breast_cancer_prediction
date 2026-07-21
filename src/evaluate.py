@@ -201,3 +201,17 @@ def calculate_metrics(
     }
 
     return metrics
+
+
+# Print Test Metrics
+
+def print_test_metrics(metrics):
+    """
+    Print evaluation metrics.
+    """
+
+    for metric, value in metrics.items():
+
+        print(f"{metric:<10}: {value:.4f}")
+
+
