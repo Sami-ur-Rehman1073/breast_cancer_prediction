@@ -290,3 +290,103 @@ def plot_roc_curve(
 
     plt.title("ROC Curve")
     plt.show()
+
+
+
+# Train vs Test Comparison
+
+def compare_train_vs_test(
+    pipeline,
+    X_train,
+    y_train,
+    X_test,
+    y_test,
+):
+    """
+    Compare train and test performance.
+    """
+
+    train_predictions = pipeline.predict(X_train)
+    test_predictions = pipeline.predict(X_test)
+
+    train_probabilities = pipeline.predict_proba(
+        X_train
+    )[:, 1]
+
+    test_probabilities = pipeline.predict_proba(
+        X_test
+    )[:, 1]
+
+    comparison = pd.DataFrame({
+
+        "Metric": [
+            "Accuracy",
+            "Precision",
+            "Recall",
+            "F1 Score",
+            "ROC AUC",
+        ],
+
+        "Training": [
+
+            accuracy_score(
+                y_train,
+                train_predictions,
+            ),
+
+            precision_score(
+                y_train,
+                train_predictions,
+            ),
+
+            recall_score(
+                y_train,
+                train_predictions,
+            ),
+
+            f1_score(
+                y_train,
+                train_predictions,
+            ),
+
+            roc_auc_score(
+                y_train,
+                train_probabilities,
+            ),
+        ],
+
+        "Test": [
+
+            accuracy_score(
+                y_test,
+                test_predictions,
+            ),
+
+            precision_score(
+                y_test,
+                test_predictions,
+            ),
+
+            recall_score(
+                y_test,
+                test_predictions,
+            ),
+
+            f1_score(
+                y_test,
+                test_predictions,
+            ),
+
+            roc_auc_score(
+                y_test,
+                test_probabilities,
+            ),
+        ],
+    })
+
+    comparison["Difference"] = (
+        comparison["Training"]
+        - comparison["Test"]
+    ).abs()
+
+    return comparison
