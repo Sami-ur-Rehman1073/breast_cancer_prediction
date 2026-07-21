@@ -443,3 +443,53 @@ def evaluate_model(
     )
 
     return metrics
+
+
+
+# Evaluate Multiple Models
+
+def evaluate_multiple_models(
+    trained_models,
+    X_test,
+    y_test,
+):
+    """
+    Evaluate all trained models.
+    """
+
+    results = []
+
+    for model_name, pipeline in trained_models.items():
+
+        predictions, probabilities = predict_pipeline(
+            pipeline,
+            X_test,
+        )
+
+        metrics = calculate_metrics(
+            y_test,
+            predictions,
+            probabilities,
+        )
+
+        metrics["Model"] = model_name
+
+        results.append(metrics)
+
+    results = pd.DataFrame(results)
+
+    results = results[[
+        "Model",
+        "Accuracy",
+        "Precision",
+        "Recall",
+        "F1 Score",
+        "ROC AUC",
+    ]]
+
+    results = results.sort_values(
+        by="ROC AUC",
+        ascending=False,
+    )
+
+    return results
