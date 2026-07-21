@@ -121,3 +121,34 @@ def create_pipeline(preprocessor, model,random_state: int = 42):
     )
 
     return pipeline
+
+
+# Fit Pipeline
+
+
+def fit_pipeline(
+    pipeline,
+    X_train,
+    y_train,
+):
+    """
+    Fits the pipeline on the training data.
+
+    Returns
+    -------
+    pipeline
+        Trained pipeline.
+    """
+
+    start_time = time.time()
+
+    pipeline.fit(
+        X_train,
+        y_train,
+    )
+
+    training_time = time.time() - start_time
+
+    print(f"Training completed in {training_time:.2f} seconds.")
+
+    return pipeline
