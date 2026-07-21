@@ -1,408 +1,282 @@
 # 🩺 Breast Cancer Prediction using Machine Learning
 
-> **A complete end-to-end Machine Learning pipeline for Breast Cancer Classification, covering Exploratory Data Analysis (EDA), Data Preprocessing, Feature Scaling, Cross-Validation, Model Training, Hyperparameter Optimization, Model Evaluation, and Model Persistence.**
 
----
 
-# 📌 Table of Contents
+*A complete end-to-end Machine Learning pipeline for Breast Cancer Diagnosis developed as part of an ML Internship Assignment.*
 
-* Project Overview
-* Problem Statement
-* Objectives
-* Dataset Information
-* Project Structure
-* Technologies Used
-* Machine Learning Workflow
-* Exploratory Data Analysis (EDA)
-* Data Preprocessing
-* Machine Learning Pipeline
-* Models Implemented
-* Hyperparameter Tuning
-* Model Evaluation
-* Performance Metrics
-* Cross Validation
-* Final Model Selection
-* Saving the Model
-* Future Improvements
-* Installation
-* Usage
-* Results
-* Author
 
----
 
-# 📖 Project Overview
+# 📌 Project Overview
 
-Breast cancer is one of the most common cancers among women worldwide. Early diagnosis greatly improves the chances of successful treatment. This project develops an end-to-end Machine Learning pipeline capable of classifying whether a tumor is **Benign** or **Malignant** using diagnostic measurements extracted from digitized images of breast masses.
+Early diagnosis of breast cancer plays a vital role in improving patient survival rates and reducing treatment costs. The objective of this project is to build a robust Machine Learning pipeline capable of accurately classifying breast tumors as **Malignant** or **Benign** based on various diagnostic measurements.
 
-This repository demonstrates the complete Machine Learning lifecycle starting from understanding the dataset to building production-ready pipelines suitable for deployment.
+This project follows an industry-standard Machine Learning workflow, including:
 
-The implementation follows industry best practices by separating:
+- Exploratory Data Analysis (EDA)
+- Data Preprocessing
+- Feature Scaling
+- Class Imbalance Handling
+- Machine Learning Pipeline
+- Cross Validation
+- Hyperparameter Tuning
+- Model Evaluation
+- Final Model Testing
 
-* Exploratory Data Analysis
-* Data Preprocessing
-* Model Building
-* Model Evaluation
-* Model Persistence
-
----
-
-# 🎯 Problem Statement
-
-Develop a robust Machine Learning model capable of accurately predicting whether a breast tumor is:
-
-* **0 → Malignant**
-* **1 → Benign**
-
-using numerical features extracted from breast cell nuclei.
-
-The solution should:
-
-* minimize overfitting
-* generalize well
-* handle feature scaling
-* support multiple algorithms
-* perform cross validation
-* produce reproducible results
-
----
-
-# 🎯 Objectives
-
-* Perform detailed exploratory data analysis.
-* Understand feature distributions.
-* Detect outliers.
-* Study feature correlations.
-* Handle preprocessing correctly.
-* Build reusable preprocessing pipelines.
-* Compare multiple machine learning algorithms.
-* Optimize model hyperparameters.
-* Evaluate models using multiple metrics.
-* Save the best performing model for deployment.
-
----
-
-# 📊 Dataset Information
-
-The dataset contains diagnostic measurements computed from digitized images of breast fine needle aspirates.
-
-### Dataset Characteristics
-
-| Property          | Value                 |
-| ----------------- | --------------------- |
-| Samples           | 569                   |
-| Features          | 30                    |
-| Target Classes    | 2                     |
-| Missing Values    | None                  |
-| Duplicate Records | None                  |
-| Feature Type      | Continuous            |
-| Target Type       | Binary Classification |
-
-### Target Labels
-
-| Value | Meaning   |
-| ----- | --------- |
-| 0     | Malignant |
-| 1     | Benign    |
+The implementation strictly avoids data leakage by performing preprocessing and resampling inside a Scikit-Learn Pipeline, ensuring reliable model evaluation.
 
 ---
 
 # 📂 Project Structure
 
 ```
-Breast_Cancer_Prediction/
+breast_cancer_prediction/
 │
 ├── data/
+│   ├── X_train.pkl
+│   ├── X_test.pkl
+│   ├── y_train.pkl
+│   └── y_test.pkl
 │
 ├── notebooks/
 │   ├── 01_EDA.ipynb
 │   ├── 02_preprocessing.ipynb
 │   └── 03_modeling.ipynb
 │
-├── models/
-│   ├── preprocessing.pkl
-│   ├── best_model.pkl
-│
-├── images/
+├── outputs/
+│   └── models/
+│       ├── preprocessor.pkl
+│       ├── best_model.pkl
+│       └── tuned_pipeline.pkl
 │
 ├── requirements.txt
 │
-├── README.md
-│
-└── .gitignore
+└── README.md
 ```
+
+---
+
+# 📊 Dataset Description
+
+The project uses the **Breast Cancer Wisconsin Diagnostic Dataset**.
+
+### Dataset Characteristics
+
+| Property | Value |
+|----------|------:|
+| Samples | 569 |
+| Features | 30 |
+| Target Classes | 2 |
+| Missing Values | None |
+| Duplicate Rows | None |
+
+### Target Classes
+
+| Label | Meaning |
+|-------|----------|
+| 0 | Malignant |
+| 1 | Benign |
+
+### Features
+
+The dataset contains 30 numerical features extracted from digitized images of breast cell nuclei, including:
+
+- Mean Radius
+- Mean Texture
+- Mean Perimeter
+- Mean Area
+- Mean Smoothness
+- Mean Compactness
+- Mean Concavity
+- Mean Concave Points
+- Mean Symmetry
+- Mean Fractal Dimension
+
+along with their corresponding **standard error** and **worst-case** measurements.
+
+---
+
+# 🔍 Exploratory Data Analysis (EDA)
+
+Several analyses were performed to understand the dataset before model development.
+
+### ✔ Data Quality Checks
+
+- No missing values
+- No duplicate records
+- All predictor variables are numerical
+- Target variable is categorical
+
+### ✔ Distribution Analysis
+
+The following visualizations were generated:
+
+- Histograms
+- Feature-wise Boxplots
+- Correlation Heatmap
+- Target Class Distribution
+
+### Key Findings
+
+- Dataset contains no missing values.
+- No duplicate observations were found.
+- Multiple features contain outliers.
+- Features have significantly different scales.
+- Strong correlations exist between several variables.
+- Class imbalance is present.
+- Feature scaling is required before model training.
+
+---
+
+# ⚙️ Data Preprocessing
+
+To ensure a clean and reproducible workflow, preprocessing was separated into its own stage.
+
+The preprocessing pipeline includes:
+
+- Train-Test Split
+- Standard Scaling using `ColumnTransformer`
+- Saving train/test datasets
+- Saving fitted preprocessor using Joblib
+
+The fitted preprocessor is reused during model training to maintain consistency.
+
+---
+
+# 🤖 Machine Learning Workflow
+
+The project follows the following pipeline:
+
+```
+Raw Dataset
+      │
+      ▼
+Train-Test Split
+      │
+      ▼
+ColumnTransformer
+(StandardScaler)
+      │
+      ▼
+SMOTE
+(Class Imbalance Handling)
+      │
+      ▼
+Machine Learning Model
+      │
+      ▼
+Cross Validation
+      │
+      ▼
+Hyperparameter Tuning
+      │
+      ▼
+Final Model
+      │
+      ▼
+Testing on Unseen Data
+```
+
+---
+
+# 🧠 Models Evaluated
+
+Multiple Machine Learning algorithms were trained and compared.
+
+Examples include:
+
+- Logistic Regression
+- Decision Tree
+- Random Forest
+- Support Vector Machine
+- K-Nearest Neighbors
+- XGBoost 
+
+Each model was evaluated using **5-Fold Stratified Cross Validation**.
+
+---
+
+# 🔧 Hyperparameter Tuning
+
+The best-performing model was further optimized using **GridSearchCV**.
+
+Hyperparameter tuning was performed to maximize the ROC-AUC score while improving the model's overall generalization performance.
+
+---
+
+# 📈 Evaluation Metrics
+
+The following metrics were used during model evaluation:
+
+- Accuracy
+- Precision
+- Recall
+- F1 Score
+- ROC-AUC Score
+- Confusion Matrix
+
+---
+
+# 🏆 Final Model Performance
+
+After hyperparameter tuning, the final model achieved:
+
+| Metric | Score |
+|---------|-------|
+| **Accuracy** | **97.37%** |
+| **Precision** | **98.57%** |
+| **Recall** | **97.18%** |
+| **F1 Score** | **97.87%** |
+| **ROC-AUC** | **99.61%** |
+
+These results indicate excellent classification performance while maintaining strong precision and recall.
 
 ---
 
 # 🛠 Technologies Used
 
-## Programming Language
-
-* Python
-
-## Libraries
-
-* Pandas
-* NumPy
-* Matplotlib
-* Seaborn
-* Scikit-Learn
-* Imbalanced-Learn
-* XGBoost
-* Joblib
+- Python
+- NumPy
+- Pandas
+- Matplotlib
+- Seaborn
+- Scikit-Learn
+- Imbalanced-Learn
+- Joblib
+- XGBoost 
 
 ---
 
-# 🔬 Machine Learning Workflow
+# 📦 Installation
 
-```
-Dataset
-     │
-     ▼
-Exploratory Data Analysis
-     │
-     ▼
-Train-Test Split
-     │
-     ▼
-Column Transformer
-(StandardScaler)
-     │
-     ▼
-Machine Learning Pipeline
-     │
-     ├── Cross Validation
-     ├── Hyperparameter Tuning
-     └── Model Training
-     │
-     ▼
-Evaluation
-     │
-     ▼
-Best Model Selection
-     │
-     ▼
-Save Model
-```
-
----
-
-# 📈 Exploratory Data Analysis (EDA)
-
-A detailed EDA was performed before model development to better understand the dataset.
-
-The following analyses were carried out:
-
-## ✔ Dataset Overview
-
-* Shape
-* Columns
-* Data types
-* Basic statistics
-
----
-
-## ✔ Missing Value Analysis
-
-Verified that:
-
-* No missing values exist.
-* Dataset is complete.
-
----
-
-## ✔ Duplicate Analysis
-
-Confirmed:
-
-* No duplicate observations.
-
----
-
-## ✔ Class Distribution
-
-Studied the distribution of benign and malignant samples to understand class imbalance.
-
----
-
-## ✔ Feature Distributions
-
-Histogram plots were generated for every feature to examine:
-
-* skewness
-* spread
-* variance
-* distribution shape
-
----
-
-## ✔ Outlier Detection
-
-Individual boxplots were created for every numerical feature.
-
-Observations:
-
-* Several variables contain outliers.
-* Outliers appear naturally due to biological measurements.
-
----
-
-## ✔ Correlation Analysis
-
-A correlation heatmap was generated to examine relationships among variables.
-
-This helped identify:
-
-* highly correlated variables
-* redundant information
-* multicollinearity
-
----
-
-# ⚙ Data Preprocessing
-
-A dedicated preprocessing notebook was created to isolate all preprocessing steps from model training.
-
-The preprocessing pipeline includes:
-
-## Train-Test Split
-
-The dataset is divided into:
-
-* Training Set
-* Testing Set
-
----
-
-## Feature Scaling
-
-Because the numerical features have different ranges, feature scaling is necessary.
-
-StandardScaler is applied through a **ColumnTransformer** to ensure:
-
-* consistent preprocessing
-* reusable transformation
-* prevention of data leakage
-
----
-
-## Preprocessor Persistence
-
-The preprocessing object is saved using Joblib so that identical transformations can be applied during inference.
-
----
-
-# 🔄 Machine Learning Pipeline
-
-Rather than manually preprocessing data before every model, Scikit-Learn Pipelines were used.
-
-Benefits include:
-
-* Cleaner code
-* Reproducibility
-* No data leakage
-* Easier deployment
-* Consistent preprocessing
-
----
-
-# 🤖 Models Implemented
-
-Multiple machine learning algorithms were trained and compared, including:
-
-* Logistic Regression
-* Decision Tree
-* Random Forest
-* Support Vector Machine
-* K-Nearest Neighbors
-* XGBoost
-* Gradient Boosting
-* Extra Trees (if applicable)
-
-Each model was trained using the same preprocessing pipeline for a fair comparison.
-
----
-
-# 🎯 Hyperparameter Tuning
-
-Each model was optimized using Grid Search with Cross Validation.
-
-Hyperparameter tuning helps identify the combination of parameters that produces the best generalization performance.
-
----
-
-# 📏 Model Evaluation
-
-Models were evaluated using several performance metrics instead of relying solely on accuracy.
-
-Metrics include:
-
-* Accuracy
-* Precision
-* Recall
-* F1 Score
-* ROC-AUC Score
-
-This provides a more complete understanding of classifier performance.
-
----
-
-# 🔁 Cross Validation
-
-Cross Validation was used to estimate how well each model generalizes to unseen data.
-
-Advantages:
-
-* Reduces overfitting
-* Produces reliable performance estimates
-* Uses multiple train-validation splits
-* Better than a single validation split
-
----
-
-# 🏆 Final Model Selection
-
-After comparing all candidate models, the best-performing model was selected based on:
-
-* Cross-validation performance
-* Test accuracy
-* Precision
-* Recall
-* F1 Score
-* ROC-AUC
-
-The selected model was then retrained using the complete training dataset before being saved.
-
----
-
-# 💾 Saving the Model
-
-The final trained artifacts are stored using Joblib.
-
-Saved objects include:
-
-* Preprocessing pipeline
-* Best trained model
-
-These files can later be loaded directly into a deployment application such as FastAPI.
-
----
-
-# 🚀 Installation
-
-Clone the repository:
+Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/breast-cancer-prediction.git
+git clone https://github.com/yourusername/breast_cancer_prediction.git
 ```
 
-Move into the project directory:
+Move into the project directory
 
 ```bash
-cd breast-cancer-prediction
+cd breast_cancer_prediction
 ```
 
-Install dependencies:
+Create a virtual environment
+
+### Windows
+
+```bash
+python -m venv venv
+```
+
+Activate it
+
+### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -410,117 +284,102 @@ pip install -r requirements.txt
 
 ---
 
-# ▶ Usage
+# ▶️ How to Run the Project
 
-Run the notebooks sequentially.
+## Step 1
 
-### Step 1
+Run the Exploratory Data Analysis notebook
 
 ```
 01_EDA.ipynb
 ```
 
-Performs:
-
-* Dataset understanding
-* Visualization
-* Statistical analysis
-
 ---
 
-### Step 2
+## Step 2
+
+Run the preprocessing notebook
 
 ```
 02_preprocessing.ipynb
 ```
 
-Performs:
+This will:
 
-* Train-test split
-* Feature scaling
-* Saving preprocessing object
+- Split the dataset
+- Fit the preprocessor
+- Save train/test data
+- Save the preprocessing object
 
 ---
 
-### Step 3
+## Step 3
+
+Run the modeling notebook
 
 ```
 03_modeling.ipynb
 ```
 
-Performs:
+This notebook will:
 
-* Model training
-* Hyperparameter tuning
-* Cross validation
-* Model comparison
-* Evaluation
-* Saving best model
-
----
-
-# 📊 Results
-
-The developed workflow demonstrates a complete machine learning solution for breast cancer prediction.
-
-Key achievements include:
-
-* Comprehensive exploratory data analysis
-* Clean preprocessing workflow
-* Reusable preprocessing pipeline
-* Multiple model comparison
-* Cross-validation based evaluation
-* Hyperparameter optimization
-* Robust performance evaluation
-* Model persistence for deployment
+- Load the preprocessed data
+- Build ML pipelines
+- Handle class imbalance
+- Perform cross validation
+- Tune hyperparameters
+- Evaluate models
+- Test the best model
 
 ---
 
-# 🔮 Future Improvements
+# 📊 Results Summary
 
-Potential future enhancements include:
+The developed Machine Learning pipeline successfully classifies breast tumors with high accuracy while following best practices to avoid data leakage.
 
-* Feature Selection
-* Recursive Feature Elimination (RFE)
-* SHAP Explainability
-* LIME Interpretability
-* Probability Calibration
-* FastAPI Deployment
-* Docker Containerization
-* CI/CD Integration
-* Model Monitoring
-* Cloud Deployment
+### Highlights
 
----
-
-# 📚 Learning Outcomes
-
-This project demonstrates practical understanding of:
-
-* Data Cleaning
-* Exploratory Data Analysis
-* Feature Scaling
-* Column Transformers
-* Machine Learning Pipelines
-* Cross Validation
-* Hyperparameter Optimization
-* Model Comparison
-* Binary Classification
-* Model Persistence
-* Production-ready Machine Learning Workflow
+- End-to-End ML Pipeline
+- Separate preprocessing stage
+- Proper Train/Test split
+- StandardScaler using ColumnTransformer
+- SMOTE integrated inside the Pipeline
+- 5-Fold Stratified Cross Validation
+- Hyperparameter Tuning using GridSearchCV
+- Excellent ROC-AUC performance (99.61%)
+- Fully reproducible workflow
 
 ---
 
-# 👨‍💻 Author
+# 🚀 Future Improvements
 
-**Sami-ur-Rehman**
+Possible extensions to this project include:
 
-Data Science Graduate | Machine Learning Engineer
-
-This project was completed as part of a Machine Learning Internship assignment and demonstrates an end-to-end implementation of a production-oriented supervised machine learning workflow for breast cancer prediction using Scikit-Learn and modern machine learning best practices.
+- Feature Selection techniques
+- Model Explainability using SHAP
+- Model Explainability using LIME
+- Calibration Curve Analysis
+- Precision-Recall Curve
+- Threshold Optimization
+- Experiment Tracking using MLflow
+- Docker containerization
+- CI/CD pipeline using GitHub Actions
+- Cloud deployment (AWS, Azure, or GCP)
 
 ---
 
-# ⭐ If you found this repository useful
+# 🎯 Learning Outcomes
 
-Please consider giving it a ⭐ on GitHub.
+This project demonstrates practical experience in:
+
+- Exploratory Data Analysis
+- Data Cleaning
+- Feature Engineering
+- Data Preprocessing
+- Handling Class Imbalance
+- Scikit-Learn Pipelines
+- Cross Validation
+- Hyperparameter Optimization
+- Model Evaluation
+- Machine Learning Best Practices
+- Reproducible ML Workflows
