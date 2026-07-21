@@ -4,7 +4,6 @@ evaluate.py
 This module contains all evaluation-related functions for the
 Breast Cancer Prediction project.
 
-Author: Sami-ur-Rehman
 """
 
 import joblib
@@ -30,3 +29,22 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay,
     RocCurveDisplay,
 )
+
+# Load Pipeline
+
+def load_pipeline(filepath):
+    """
+    Load a trained pipeline.
+
+    Parameters
+    ----------
+    filepath : str
+
+    Returns
+    -------
+    Pipeline
+    """
+
+    return joblib.load(filepath)
+
+
