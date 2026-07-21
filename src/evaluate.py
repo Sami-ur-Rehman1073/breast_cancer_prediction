@@ -493,3 +493,92 @@ def evaluate_multiple_models(
     )
 
     return results
+
+
+# Feature Importance
+
+def plot_feature_importance(
+    pipeline,
+    feature_names,
+    top_n=None,
+):
+    """
+    Plot feature importance for the trained model.
+
+    Supports:
+    - Logistic Regression
+    - Decision Tree
+    - Random Forest
+    - Gradient Boosting
+    - XGBoost
+
+    Parameters
+    ----------
+    pipeline : Pipeline
+        Trained pipeline.
+
+    feature_names : list
+        List of feature names.
+
+    top_n : int, optional
+        Display only the top N features.
+    """
+
+    classifier = pipeline.named_steps["classifier"]
+
+    # Logistic Regression
+
+    if hasattr(classifier, "coef_"):
+
+        importance = np.abs(
+            classifier.coef_[0]
+        )
+
+    # Tree-Based Models
+
+    elif hasattr(classifier, "feature_importances_"):
+
+        importance = classifier.feature_importances_
+
+    else:
+
+        raise ValueError(
+            f"{classifier.__class__.__name__} "
+            "does not support feature importance."
+        )
+
+    importance_df = pd.DataFrame({
+
+        "Feature": feature_names,
+
+        "Importance": importance
+
+    })
+
+    importance_df = importance_df.sort_values(
+        by="Importance",
+        ascending=False,
+    )
+
+    if top_n is not None:
+        importance_df = importance_df.head(top_n)
+
+    plt.figure(figsize=(10, 8))
+
+    sns.barplot(
+        data=importance_df,
+        x="Importance",
+        y="Feature",
+    )
+
+    plt.title("Feature Importance")
+
+    plt.xlabel("Importance")
+
+    plt.ylabel("Feature")
+
+    plt.tight_layout()
+
+    plt.show()
+
+    return importance_df
