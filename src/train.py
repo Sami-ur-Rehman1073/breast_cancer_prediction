@@ -152,3 +152,20 @@ def fit_pipeline(
     print(f"Training completed in {training_time:.2f} seconds.")
 
     return pipeline
+
+
+# Prediction
+
+def predict_pipeline(
+    pipeline,
+    X_test,
+):
+    """
+    Generate predictions and prediction probabilities.
+    """
+
+    predictions = pipeline.predict(X_test)
+
+    probabilities = pipeline.predict_proba(X_test)[:, 1]
+
+    return predictions, probabilities
