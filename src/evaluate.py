@@ -215,3 +215,36 @@ def print_test_metrics(metrics):
         print(f"{metric:<10}: {value:.4f}")
 
 
+# Confusion Matrix
+
+def plot_confusion_matrix(
+    y_test,
+    predictions,
+):
+    """
+    Plot the confusion matrix.
+
+    Parameters
+    ----------
+    y_test : pd.Series
+    predictions : np.ndarray
+    """
+
+    cm = confusion_matrix(
+        y_test,
+        predictions,
+    )
+
+    disp = ConfusionMatrixDisplay(
+        confusion_matrix=cm,
+        display_labels=["Benign", "Malignant"],
+    )
+
+    disp.plot(
+        cmap="Blues",
+        values_format="d",
+    )
+
+    plt.title("Confusion Matrix")
+    plt.grid(False)
+    plt.show()
