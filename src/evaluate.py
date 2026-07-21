@@ -266,3 +266,27 @@ def print_classification_report(
         y_test,
         predictions,
     ))
+
+
+
+# ==========================================================
+# ROC Curve
+# ==========================================================
+
+def plot_roc_curve(
+    pipeline,
+    X_test,
+    y_test,
+):
+    """
+    Plot ROC Curve.
+    """
+
+    RocCurveDisplay.from_estimator(
+        pipeline,
+        X_test,
+        y_test,
+    )
+
+    plt.title("ROC Curve")
+    plt.show()
