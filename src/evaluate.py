@@ -111,3 +111,28 @@ def perform_cross_validation(
     )
 
     return pd.DataFrame(cv_results)
+
+
+
+
+# Average Cross Validation Results
+
+
+def get_average_cv_scores(cv_results):
+    """
+    Calculate average cross-validation metrics.
+    """
+
+    metric_columns = [
+        "test_accuracy",
+        "test_precision",
+        "test_recall",
+        "test_f1",
+        "test_roc_auc",
+    ]
+
+    return (
+        cv_results[metric_columns]
+        .mean()
+        .rename("Average")
+    )
