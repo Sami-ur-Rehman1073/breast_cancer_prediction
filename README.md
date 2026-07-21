@@ -24,36 +24,45 @@ This project follows an industry-standard Machine Learning workflow, including:
 
 The implementation strictly avoids data leakage by performing preprocessing and resampling inside a Scikit-Learn Pipeline, ensuring reliable model evaluation.
 
----
-
-# 📂 Project Structure
+# 📁 Project Structure
 
 ```
-breast_cancer_prediction/
+week1_breast_cancer_prediction/
 │
 ├── data/
-│   ├── X_train.pkl
-│   ├── X_test.pkl
-│   ├── y_train.pkl
-│   └── y_test.pkl
+│   └── Contains the dataset used for training and evaluation.
 │
 ├── notebooks/
 │   ├── 01_EDA.ipynb
-│   ├── 02_preprocessing.ipynb
-│   └── 03_modeling.ipynb
+│   ├── 02_Preprocessing.ipynb
+│   └── 03_Modeling.ipynb
+│
+├── src/
+│   ├── preprocess.py      # Data preprocessing utilities
+│   ├── train.py           # Model training pipeline
+│   └── evaluate.py        # Model evaluation functions
 │
 ├── outputs/
-│   └── models/
-│       ├── preprocessor.pkl
-│       ├── best_model.pkl
-│       └── tuned_pipeline.pkl
+│   ├── figures/           # Generated visualizations and plots
+│   └── models/            # Saved preprocessing objects and trained models
 │
-├── requirements.txt
-│
-└── README.md
+├── README.md              # Project documentation
+├── requirements.txt       # Python dependencies
+└── .gitignore             # Files ignored by Git
 ```
 
----
+### Directory Description
+
+| Directory/File | Description |
+|----------------|-------------|
+| **data/** | Stores the Breast Cancer Wisconsin Diagnostic dataset used in this project. |
+| **notebooks/** | Contains the complete machine learning workflow, including Exploratory Data Analysis, Data Preprocessing, and Model Development. |
+| **src/** | Python scripts containing reusable preprocessing, training, and evaluation code. |
+| **outputs/figures/** | Stores plots generated during EDA and model evaluation such as histograms, boxplots, heatmaps, ROC curves, and confusion matrices. |
+| **outputs/models/** | Stores serialized preprocessing objects and trained machine learning models for future inference. |
+| **requirements.txt** | Lists all required Python packages to reproduce the project. |
+| **README.md** | Documentation explaining the project, setup instructions, workflow, and results. |
+| **.gitignore** | Specifies files and directories excluded from version control. |
 
 # 📊 Dataset Description
 
