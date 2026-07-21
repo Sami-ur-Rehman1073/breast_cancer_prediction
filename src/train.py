@@ -30,6 +30,8 @@ from sklearn.metrics import (
 )
 
 # Classification Models
+
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import (
@@ -41,3 +43,46 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 
 from xgboost import XGBClassifier
+
+
+
+
+# Model Dictionary
+
+def get_models(random_state: int = 42):
+    """
+    Returns all machine learning models used in the project.
+    """
+
+    models = {
+        "Logistic Regression": LogisticRegression(
+            random_state=random_state,
+            max_iter=1000
+        ),
+
+        "Decision Tree": DecisionTreeClassifier(
+            random_state=random_state
+        ),
+
+        "Random Forest": RandomForestClassifier(
+            random_state=random_state
+        ),
+
+        "Gradient Boosting": GradientBoostingClassifier(
+            random_state=random_state
+        ),
+
+        "XGBoost": XGBClassifier(
+            random_state=random_state,
+            eval_metric="logloss"
+        ),
+
+        "KNN": KNeighborsClassifier(),
+
+        "SVM": SVC(
+            probability=True,
+            random_state=random_state
+        ),
+    }
+
+    return models
