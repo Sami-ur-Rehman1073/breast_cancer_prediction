@@ -136,3 +136,25 @@ def get_average_cv_scores(cv_results):
         .mean()
         .rename("Average")
     )
+
+
+# Cross Validation Standard Deviation
+
+def get_cv_std(cv_results):
+    """
+    Calculate standard deviation of cross-validation metrics.
+    """
+
+    metric_columns = [
+        "test_accuracy",
+        "test_precision",
+        "test_recall",
+        "test_f1",
+        "test_roc_auc",
+    ]
+
+    return (
+        cv_results[metric_columns]
+        .std()
+        .rename("Std Dev")
+    )
